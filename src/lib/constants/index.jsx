@@ -1,12 +1,10 @@
 import {
 	HiOutlineViewGrid,
-	HiOutlineCube,
-	HiOutlineShoppingCart,
-	HiOutlineUsers,
-	HiOutlineDocumentText,
-	HiOutlineAnnotation,
 	HiOutlineQuestionMarkCircle,
-	HiOutlineCog
+	HiOutlineCog,
+	HiOutlineDocumentReport,
+	HiOutlineLocationMarker,
+	HiOutlineBell
 } from 'react-icons/hi'
 
 export const DASHBOARD_SIDEBAR_LINKS = [
@@ -17,35 +15,24 @@ export const DASHBOARD_SIDEBAR_LINKS = [
 		icon: <HiOutlineViewGrid />
 	},
 	{
-		key: 'products',
-		label: 'Products',
-		path: '/products',
-		icon: <HiOutlineCube />
+		key: 'incidents',
+		label: 'Incidents',
+		path: '/incidents', // Change the path to the appropriate route for incidents
+		icon: <HiOutlineBell /> // Use an appropriate icon for incidents
 	},
 	{
-		key: 'orders',
-		label: 'Orders',
-		path: '/orders',
-		icon: <HiOutlineShoppingCart />
+		key: 'reports',
+		label: 'Reports', // Change the label to match the new context
+		path: '/reports', // Change the path to the appropriate route for reports
+		icon: <HiOutlineDocumentReport /> // Use an appropriate icon for reports
 	},
 	{
-		key: 'customers',
-		label: 'Customers',
-		path: '/customers',
-		icon: <HiOutlineUsers />
+		key: 'locations',
+		label: 'Locations', // Change the label to match the new context
+		path: '/locations', // Change the path to the appropriate route for locations
+		icon: <HiOutlineLocationMarker /> // Use an appropriate icon for locations
 	},
-	{
-		key: 'transactions',
-		label: 'Transactions',
-		path: '/transactions',
-		icon: <HiOutlineDocumentText />
-	},
-	{
-		key: 'messages',
-		label: 'Messages',
-		path: '/messages',
-		icon: <HiOutlineAnnotation />
-	}
+	
 ]
 
 export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
