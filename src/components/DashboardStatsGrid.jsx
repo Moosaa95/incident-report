@@ -1,35 +1,45 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { IoBagHandle, IoPieChart, IoPeople, IoCart, IoAlertCircleOutline, IoCheckmarkDoneOutline, IoPersonCircleOutline, IoTimeOutline } from 'react-icons/io5'
+import AuthContext from '../context/AuthContext';
 
 export default function DashboardStatsGrid() {
+	const [data, setData] = useState([])
+
+	const {getDashboard} = useContext(AuthContext)
+	useEffect(() => {
+        getDashboard().then((data) => setData(data))
+    }, [])
+
+	console.log('dahboard', data);
+
 	return (
-	  <div className="flex flex-col md:flex-row gap-4">
+	  <div className="flex flex-col gap-4 md:flex-row">
 		<BoxWrapper icon={<IoAlertCircleOutline />} bgColor="bg-sky-500">
-		  <span className="text-sm text-white font-bold">Total Incidents</span>
+		  <span className="text-sm font-bold text-white">Total Incidents</span>
 		  <div className="flex items-center">
-			<strong className="text-xl text-gray-700 font-semibold">54232</strong>
-			{/* <span className="text-sm text-green-500 pl-2">+343</span> */}
+			<strong className="text-xl font-semibold text-gray-700">{data && data.total_incidents}</strong>
+			{/* <span className="pl-2 text-sm text-green-500">+343</span> */}
 		  </div>
 		</BoxWrapper>
 		<BoxWrapper icon={<IoCheckmarkDoneOutline />} bgColor="bg-orange-600">
-		  <span className="text-sm text-white font-bold">Incidents Resolved</span>
+		  <span className="text-sm font-bold text-white">Incidents Resolved</span>
 		  <div className="flex items-center">
-			<strong className="text-xl text-gray-700 font-semibold">423</strong>
-			{/* <span className="text-sm text-green-500 pl-2">-343</span> */}
+			<strong className="text-xl font-semibold text-gray-700">{data && data.resolved_incidents}</strong>
+			{/* <span className="pl-2 text-sm text-green-500">-343</span> */}
 		  </div>
 		</BoxWrapper>
 		<BoxWrapper icon={<IoPersonCircleOutline />} bgColor="bg-yellow-400">
-		  <span className="text-sm text-white font-bold">Total Users</span>
+		  <span className="text-sm font-bold text-white">Total Users</span>
 		  <div className="flex items-center">
-			<strong className="text-xl text-gray-700 font-semibold">12313</strong>
-			<span className="text-sm text-red-500 pl-2">-30</span>
+			<strong className="text-xl font-semibold text-gray-700">{data && data.total_users}</strong>
+			<span className="pl-2 text-sm text-red-500">-30</span>
 		  </div>
 		</BoxWrapper>
 		<BoxWrapper icon={<IoTimeOutline />} bgColor="bg-green-600">
-		  <span className="text-sm text-white font-bold">Pending Incidents</span>
+		  <span className="text-sm font-bold text-white">Pending Incidents</span>
 		  <div className="flex items-center">
-			<strong className="text-xl text-gray-700 font-semibold">16432</strong>
-			<span className="text-sm text-red-500 pl-2">-43</span>
+			<strong className="text-xl font-semibold text-gray-700">{data && data.pending_incidents}</strong>
+			<span className="pl-2 text-sm text-red-500">-43</span>
 		  </div>
 		</BoxWrapper>
 	  </div>
@@ -38,7 +48,7 @@ export default function DashboardStatsGrid() {
   function BoxWrapper({ children, icon, bgColor }) {
 	return (
 	  <div className={`bg-white rounded-sm p-4 border border-gray-200 flex items-center ${bgColor} md:flex-1 md:max-w-[calc(25%-1rem)]`}>
-		<div className="rounded-full h-12 w-12 flex items-center justify-center text-white">
+		<div className="flex items-center justify-center w-12 h-12 text-white rounded-full">
 		  {icon}
 		</div>
 		<div className="pl-4">
