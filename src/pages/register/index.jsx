@@ -106,29 +106,30 @@
 
 // export default Register;
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom'; // Import the Link component from React Router
+import AuthContext from '../../context/AuthContext';
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordError, setPasswordError] = useState('');
   const [addressError, setAddressError] = useState('');
 
+  const {registerUser} = useContext(AuthContext)
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const addressInput = e.target.address.value;
     const emailInput = e.target.email.value;
+    const passwordInput = e.target.password.value;
 
     if (addressInput.trim() === '') {
       setAddressError('Address is required.');
       return;
     }
 
-
-    
-    const passwordInput = e.target.password.value;
     if (passwordInput.length < 6 || /^\d+$/.test(passwordInput)) {
       setPasswordError('Password must be at least 6 characters long and should not contain only numbers.');
       return;
@@ -136,12 +137,18 @@ const Register = () => {
 
     setIsLoading(true);
 
-    // Simulate an API call or registration process
-    setTimeout(() => {
+    try {
+      // Make an API call to register the user
+      await registerUser(emailInput, passwordInput, addressInput);
+
+      // Registration was successful, you can redirect or show a success message
+      console.log('Registration successful');
+    } catch (error) {
+      console.log('Registration failed', error);
+      // Handle the registration error, e.g., display an error message
+    } finally {
       setIsLoading(false);
-      setPasswordError('');
-      setAddressError('');
-    }, 2000);
+    }
   };
 
   return (

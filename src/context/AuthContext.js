@@ -63,76 +63,48 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    //   const registerUser = async (
-    //     email,
-    //     user_name,
-    //     password,
-    //     password2,
-    //     usertype,
-    //     state
-    //   ) => {
-    //     try {
-    //       if (password !== password2) {
-    //         // toast.error("Passwords do not match");
-    //         return;
-    //       }
-
-    //       const response = await fetch(
-    //         `${server}/accounts/api/register/`,
-    //         {
-    //           method: "POST",
-    //           headers: {
-    //             "Content-Type": "application/json",
-    //           },
-    //           body: JSON.stringify({
-    //             email,
-    //             user_name,
-    //             password,
-    //             password2,
-    //             state,
-    //             usertype,
-    //           }),
-    //         }
-    //       );
-
-    //       if (response.ok) {
-    //         const data = await response.json();
-    //         if (data) {
-    //         //   toast.success(data.message);
-    //         }
-    //         // loginUser(email, password); // Automatically log in the user after successful registration
-    //       } else {
-    //         console.log("Registration failed");
-    //         // toast.error("Registration Failed")
-    //       }
-    //     } catch (error) {
-    //       console.log("Something went wrong during registration", error);
-    //     }
-    //   };
-
-    //   const fetchCategories = async () => {
-    //     try {
-    //       const response = await fetch(
-    //         `${server}/accounts/categories/`,
-    //         {
-    //           method: "GET",
-    //           headers: {
-    //             "Content-Type": "application/json",
-    //           },
-    //         }
-    //       );
-
-    //       if (!response.ok) {
-    //         throw new Error(`HTTP error! Status: ${response.status}`);
-    //       }
-
-    //       const data = await response.json();
-    //       return data;
-    //     } catch (error) {
-    //       console.error("Error fetching categories:", error);
-    //       return null;
-    //     }
-    //   };
+    const registerUser = async (email, password, address) => {
+        try {
+            // Replace with your actual server URL
+    
+            const response = await fetch(`${server}/user/create-user/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    address
+                })
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                if (data) {
+                    // Registration was successful, you can perform additional actions here
+                    console.log('Registration successful');
+                    // You can also log in the user here if needed
+                    // loginUser(email, password);
+                } else {
+                    console.log('Registration failed');
+                    // Display an error message to the user if needed
+                    // toast.error("Registration Failed");
+                }
+            } else {
+                console.log('Registration failed');
+                // Display an error message to the user if needed
+                // toast.error("Registration Failed");
+            }
+        } catch (error) {
+            console.log('Something went wrong during registration', error);
+            // Handle the error or display an error message
+        }
+    };
+    
+    // Usage example:
+    // registerUser('user@example.com', 'password123', '123 Main St');
+    
 
     const createLocation = async (locationData) => {
         try {
@@ -351,8 +323,7 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-
-    // reports 
+    // reports
     // Function to get all reports
     const getAllReports = async () => {
         try {
@@ -466,75 +437,70 @@ export const AuthProvider = ({ children }) => {
     const editUserProfile = async (userData) => {
         try {
             const response = await fetch(`${server}/user/edit-profile/`, {
-                method: 'PUT',  // Use PUT or PATCH depending on your API
+                method: 'PUT', // Use PUT or PATCH depending on your API
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${authTokens.access}`,
+                    Authorization: `Bearer ${authTokens.access}`
                     // Include any authentication headers if needed
                 },
                 body: JSON.stringify(userData)
-            });
-    
+            })
+
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(`HTTP error! Status: ${response.status}`)
             }
-    
-            const data = await response.json();
-            return data;
+
+            const data = await response.json()
+            return data
         } catch (error) {
-            console.error('Error editing user profile:', error);
-            throw error;
+            console.error('Error editing user profile:', error)
+            throw error
         }
-    };
-    
-    
+    }
+
     const changePassword = async (passwordData) => {
         try {
-          const response = await fetch(`${server}/user/change-password/`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${authTokens.access}`, // Include the authentication token
-            },
-            body: JSON.stringify(passwordData),
-          });
-      
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-      
-          const data = await response.json();
-          return data;
+            const response = await fetch(`${server}/user/change-password/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${authTokens.access}` // Include the authentication token
+                },
+                body: JSON.stringify(passwordData)
+            })
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`)
+            }
+
+            const data = await response.json()
+            return data
         } catch (error) {
-          console.error('Error changing password:', error);
-          throw error;
+            console.error('Error changing password:', error)
+            throw error
         }
-      };
-    
-      const getUserDetail = async (user_id) => {
+    }
+
+    const getUserDetail = async (user_id) => {
         try {
+            const response = await fetch(`${server}/user/get-user-detail?user_id=${user_id}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${authTokens.access}` // Include the authentication token
+                }
+            })
 
-          const response = await fetch(`${server}/user/get-user-detail?user_id=${user_id}`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${authTokens.access}`, // Include the authentication token
-            },
-          });
-      
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-      
-          const data = await response.json();
-          return data;
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`)
+            }
+
+            const data = await response.json()
+            return data
         } catch (error) {
-          console.error('Error getting user detail:', error);
-          throw error;
+            console.error('Error getting user detail:', error)
+            throw error
         }
-      };
-      
-      
-
+    }
 
     // dashboard
     const getDashboard = async () => {
@@ -612,7 +578,8 @@ export const AuthProvider = ({ children }) => {
         changePassword,
         editUserProfile,
         getUserDetail,
-        loginUser
+        loginUser,
+        registerUser
     }
 
     return <AuthContext.Provider value={contextData}>{children}</AuthContext.Provider>
