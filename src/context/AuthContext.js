@@ -463,6 +463,78 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const editUserProfile = async (userData) => {
+        try {
+            const response = await fetch(`${server}/user/edit-profile/`, {
+                method: 'PUT',  // Use PUT or PATCH depending on your API
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${authTokens.access}`,
+                    // Include any authentication headers if needed
+                },
+                body: JSON.stringify(userData)
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error editing user profile:', error);
+            throw error;
+        }
+    };
+    
+    
+    const changePassword = async (passwordData) => {
+        try {
+          const response = await fetch(`${server}/user/change-password/`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${authTokens.access}`, // Include the authentication token
+            },
+            body: JSON.stringify(passwordData),
+          });
+      
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+      
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Error changing password:', error);
+          throw error;
+        }
+      };
+    
+      const getUserDetail = async (user_id) => {
+        try {
+
+          const response = await fetch(`${server}/user/get-user-detail?user_id=${user_id}`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${authTokens.access}`, // Include the authentication token
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+      
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Error getting user detail:', error);
+          throw error;
+        }
+      };
+      
+      
+
 
     // dashboard
     const getDashboard = async () => {
@@ -537,6 +609,9 @@ export const AuthProvider = ({ children }) => {
         getReportById,
         getDashboard,
         getUsers,
+        changePassword,
+        editUserProfile,
+        getUserDetail,
         loginUser
     }
 

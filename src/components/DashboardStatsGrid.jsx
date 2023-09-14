@@ -32,14 +32,14 @@ export default function DashboardStatsGrid() {
 		  <span className="text-sm font-bold text-white">Total Users</span>
 		  <div className="flex items-center">
 			<strong className="text-xl font-semibold text-gray-700">{data && data.total_users}</strong>
-			<span className="pl-2 text-sm text-red-500">-30</span>
+			{/* <span className="pl-2 text-sm text-red-500">-30</span> */}
 		  </div>
 		</BoxWrapper>
 		<BoxWrapper icon={<IoTimeOutline />} bgColor="bg-green-600">
 		  <span className="text-sm font-bold text-white">Pending Incidents</span>
 		  <div className="flex items-center">
 			<strong className="text-xl font-semibold text-gray-700">{data && data.pending_incidents}</strong>
-			<span className="pl-2 text-sm text-red-500">-43</span>
+			{/* <span className="pl-2 text-sm text-red-500">-43</span> */}
 		  </div>
 		</BoxWrapper>
 	  </div>

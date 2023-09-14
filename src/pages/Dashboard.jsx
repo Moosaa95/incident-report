@@ -6,6 +6,7 @@ import BuyerProfilePieChart from '../components/BuyerProfilePieChart'
 import PopularProducts from '../components/PopularProducts'
 import NetworkIncidentReports from '../components/PopularProducts'
 import IncidentChart from '../components/TransactionChart'
+import IncidentPieChart from '../components/BuyerProfilePieChart'
 
 export default function Dashboard() {
 	return (
@@ -13,7 +14,7 @@ export default function Dashboard() {
 			<DashboardStatsGrid />
 			<div className="flex flex-row gap-4 w-full">
 				<IncidentChart />
-				<BuyerProfilePieChart />
+				<IncidentPieChart />
 			</div>
 			<div className="flex flex-row gap-4 w-full">
 				<RecentOrders />

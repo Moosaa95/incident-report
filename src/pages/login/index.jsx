@@ -93,9 +93,9 @@ const Login = () => {
         }
 
         // Check password length
-        if (!password || password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters long'
-        }
+        // if (!password || password.length < 6) {
+        //     newErrors.password = 'Password must be at least 6 characters long'
+        // }
 
         // Simulate an API call or authentication process
         // setTimeout(() => {
