@@ -51,22 +51,58 @@ export const AuthProvider = ({ children }) => {
                 setAuthTokens(data)
                 const decodedToken = jwt_decode(data.access)
                 localStorage.setItem('authToken', decodedToken)
-                toast.success('login successful')
+                alert('login successful')
                 setUser(decodedToken)
                 navigate('/')
             } else {
-                console.log('Login failed')
-                toast.error('Login failed')
+                console.log('Login failed', response)
+                alert('Login failed, please check and try again')
             }
         } catch (error) {
-            console.log('Something went wrong during login', error)
+            alert('Something went wrong during login', error)
         }
     }
 
+    // const registerUser = async (email, password, address) => {
+    //     try {
+    //         // Replace with your actual server URL
+
+    //         const response = await fetch(`${server}/user/create-user/`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({
+    //                 email,
+    //                 password,
+    //                 address
+    //             })
+    //         });
+
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             if (data) {
+    //                 // Registration was successful, you can perform additional actions here
+    //                 console.log('Registration successful');
+    //                 // You can also log in the user here if needed
+    //                 // loginUser(email, password);
+    //             } else {
+    //                 console.log('Registration failed');
+    //                 // Display an error message to the user if needed
+    //                 // toast.error("Registration Failed");
+    //             }
+    //         } else {
+    //             console.log('Registration failed');
+    //             // Display an error message to the user if needed
+    //             // toast.error("Registration Failed");
+    //         }
+    //     } catch (error) {
+    //         console.log('Something went wrong during registration', error);
+    //         // Handle the error or display an error message
+    //     }
+    // };
     const registerUser = async (email, password, address) => {
         try {
-            // Replace with your actual server URL
-    
             const response = await fetch(`${server}/user/create-user/`, {
                 method: 'POST',
                 headers: {
@@ -77,34 +113,35 @@ export const AuthProvider = ({ children }) => {
                     password,
                     address
                 })
-            });
-    
+            })
+
             if (response.ok) {
-                const data = await response.json();
-                if (data) {
-                    // Registration was successful, you can perform additional actions here
-                    console.log('Registration successful');
-                    // You can also log in the user here if needed
-                    // loginUser(email, password);
-                } else {
-                    console.log('Registration failed');
-                    // Display an error message to the user if needed
-                    // toast.error("Registration Failed");
+                const data = await response.json()
+                if (data.message) {
+                    // Display the success message to the user
+                    alert(data.message) // You can use a more sophisticated UI component instead of `alert`
                 }
+                // Optionally, you can navigate to another page or perform other actions on success.
             } else {
-                console.log('Registration failed');
-                // Display an error message to the user if needed
-                // toast.error("Registration Failed");
+                const errorData = await response.json()
+                if (errorData && errorData.email) {
+                    // Display a user-friendly error message for email duplication
+                    alert(
+                        'Registration failed: This email address is already in use. Please use a different email address or log in.'
+                    )
+                } else {
+                    // Display a generic error message
+                    alert('Registration failed. Please check your information and try again.')
+                }
             }
         } catch (error) {
-            console.log('Something went wrong during registration', error);
-            // Handle the error or display an error message
+            console.error('Something went wrong during registration', error)
+            alert('Something went wrong during registration. Please try again later.')
         }
-    };
-    
+    }
+
     // Usage example:
     // registerUser('user@example.com', 'password123', '123 Main St');
-    
 
     const createLocation = async (locationData) => {
         try {

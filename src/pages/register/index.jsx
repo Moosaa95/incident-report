@@ -27,9 +27,8 @@
 //       return;
 //     }
 
-
 //     setIsLoading(true);
-    
+
 //     // Simulate an API call or registration process
 //     setTimeout(() => {
 //         setIsLoading(false);
@@ -106,122 +105,146 @@
 
 // export default Register;
 
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom'; // Import the Link component from React Router
-import AuthContext from '../../context/AuthContext';
+import React, { useContext, useState } from 'react'
+import { Link } from 'react-router-dom' // Import the Link component from React Router
+import AuthContext from '../../context/AuthContext'
 
 const Register = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [passwordError, setPasswordError] = useState('');
-  const [addressError, setAddressError] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
+    const [passwordError, setPasswordError] = useState('')
+    const [addressError, setAddressError] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
-  const {registerUser} = useContext(AuthContext)
+    const { registerUser } = useContext(AuthContext)
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+        const addressInput = e.target.address.value
+        const emailInput = e.target.email.value
+        const passwordInput = e.target.password.value
 
-    const addressInput = e.target.address.value;
-    const emailInput = e.target.email.value;
-    const passwordInput = e.target.password.value;
+        if (addressInput.trim() === '') {
+            setAddressError('Address is required.')
+            return
+        }
 
-    if (addressInput.trim() === '') {
-      setAddressError('Address is required.');
-      return;
+        if (passwordInput.length < 6 || /^\d+$/.test(passwordInput)) {
+            setPasswordError('Password must be at least 6 characters long and should not contain only numbers.')
+            return
+        }
+
+        setIsLoading(true)
+
+        try {
+            // Make an API call to register the user
+            await registerUser(emailInput, passwordInput, addressInput)
+
+            e.target.reset();
+           
+        } catch (error) {
+            console.log('Registration failed', error)
+            // Handle the registration error, e.g., display an error message
+        } finally {
+            setErrorMessage('Registration failed. Please try again.')
+            setIsLoading(false)
+        }
     }
 
-    if (passwordInput.length < 6 || /^\d+$/.test(passwordInput)) {
-      setPasswordError('Password must be at least 6 characters long and should not contain only numbers.');
-      return;
-    }
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+            <div className="w-full p-8 transform -translate-y-8 bg-white rounded shadow-md sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 rotate-x-6">
+                <h1 className="mb-4 text-2xl font-semibold text-center">Create an Account</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-4">
+                        <label className="block mb-1 text-sm font-medium" htmlFor="email">
+                            Email
+                        </label>
+                        <input
+                            className="w-full px-3 py-2 border rounded focus:ring focus:ring-pink-300"
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            autoComplete="email"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block mb-1 text-sm font-medium" htmlFor="password">
+                            Password
+                        </label>
+                        <input
+                            className="w-full px-3 py-2 border rounded focus:ring focus:ring-pink-300"
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autoComplete="new-password"
+                            required
+                        />
+                        {passwordError && <p className="mt-1 text-xs text-red-500">{passwordError}</p>}
+                    </div>
+                    <div className="mb-4">
+                        <label className="block mb-1 text-sm font-medium" htmlFor="address">
+                            Address
+                        </label>
+                        <input
+                            className="w-full px-3 py-2 border rounded focus:ring focus:ring-pink-300"
+                            type="text"
+                            id="address"
+                            name="address"
+                            placeholder="Enter your address"
+                            autoComplete="address"
+                            required
+                        />
+                        {addressError && <p className="mt-1 text-xs text-red-500">{addressError}</p>}
+                    </div>
+                    <button
+                        className={`w-full py-2 bg-pink-500 text-white rounded hover:bg-pink-600 focus:outline-none focus:ring focus:ring-pink-300 ${
+                            isLoading ? 'cursor-not-allowed opacity-75' : ''
+                        }`}
+                        type="submit"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Registering...' : 'Register'}
+                    </button>
+                </form>
+                {isLoading && (
+                    <div className="mt-4 text-center">
+                        <div className="inline-block animate-spin">
+                            <svg
+                                className="w-6 h-6 text-pink-600"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M12 4v6m0 0v6m0-6h6m-6 0H6"
+                                ></path>
+                            </svg>
+                        </div>
+                        <span className="ml-2 text-pink-600">Please wait...</span>
+                    </div>
+                )}
+                {errorMessage && <div className="mt-4 text-center text-red-500">{errorMessage}</div>}
 
-    setIsLoading(true);
+                {successMessage && <div className="mt-4 text-center text-green-500">{successMessage}</div>}
 
-    try {
-      // Make an API call to register the user
-      await registerUser(emailInput, passwordInput, addressInput);
-
-      // Registration was successful, you can redirect or show a success message
-      console.log('Registration successful');
-    } catch (error) {
-      console.log('Registration failed', error);
-      // Handle the registration error, e.g., display an error message
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
-      <div className="w-full p-8 transform -translate-y-8 bg-white rounded shadow-md sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 rotate-x-6">
-        <h1 className="mb-4 text-2xl font-semibold text-center">Create an Account</h1>
-        <form onSubmit={handleSubmit}>
-          
-          <div className="mb-4">
-            <label className="block mb-1 text-sm font-medium" htmlFor="email">Email</label>
-            <input
-              className="w-full px-3 py-2 border rounded focus:ring focus:ring-pink-300"
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Enter your email"
-              autoComplete="email"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-1 text-sm font-medium" htmlFor="password">Password</label>
-            <input
-              className="w-full px-3 py-2 border rounded focus:ring focus:ring-pink-300"
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Enter your password"
-              autoComplete="new-password"
-              required
-            />
-            {passwordError && <p className="mt-1 text-xs text-red-500">{passwordError}</p>}
-          </div>
-          <div className="mb-4">
-            <label className="block mb-1 text-sm font-medium" htmlFor="address">Address</label>
-            <input
-              className="w-full px-3 py-2 border rounded focus:ring focus:ring-pink-300"
-              type="text"
-              id="address"
-              name="address"
-              placeholder="Enter your address"
-              autoComplete="address"
-              required
-            />
-            {addressError && <p className="mt-1 text-xs text-red-500">{addressError}</p>}
-          </div>
-          <button
-            className={`w-full py-2 bg-pink-500 text-white rounded hover:bg-pink-600 focus:outline-none focus:ring focus:ring-pink-300 ${isLoading ? 'cursor-not-allowed opacity-75' : ''}`}
-            type="submit"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Registering...' : 'Register'}
-          </button>
-        </form>
-        {isLoading && (
-          <div className="mt-4 text-center">
-            <div className="inline-block animate-spin">
-              <svg className="w-6 h-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v6m0 0v6m0-6h6m-6 0H6"></path>
-              </svg>
+                {/* Add the login link */}
+                <div className="mt-4 text-center">
+                    <p>Already have an account?</p>
+                    <Link to="/login" className="text-blue-500 hover:underline">
+                        Login
+                    </Link>
+                </div>
             </div>
-            <span className="ml-2 text-pink-600">Please wait...</span>
-          </div>
-        )}
-
-        {/* Add the login link */}
-        <div className="mt-4 text-center">
-          <p>Already have an account?</p>
-          <Link to="/login" className="text-blue-500 hover:underline">Login</Link>
         </div>
-      </div>
-    </div>
-  );
-};
+    )
+}
 
-export default Register;
+export default Register
